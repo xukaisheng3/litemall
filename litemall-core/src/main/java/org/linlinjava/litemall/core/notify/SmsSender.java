@@ -10,6 +10,7 @@ public interface SmsSender {
      */
     SmsResult send(String phone, String content);
 
+    SmsResult sendWithAliTemplate(String phone, String templateCode, String params);
 
     /**
      * 通过短信模版发送短信息

@@ -10,7 +10,16 @@ import java.util.Map;
 public class NotifyProperties {
     private Mail mail;
     private Sms sms;
+    private Alisms alisms;
     private Wx wx;
+
+    public Alisms getAlisms() {
+        return alisms;
+    }
+
+    public void setAlisms(Alisms alisms) {
+        this.alisms = alisms;
+    }
 
     public Mail getMail() {
         return mail;
@@ -90,6 +99,72 @@ public class NotifyProperties {
 
         public void setSendto(String sendto) {
             this.sendto = sendto;
+        }
+    }
+
+    public static class Alisms {
+        private boolean enable;
+        private String regionId;
+        private String domain;
+        private String signName;
+        private String accessKeyId;
+        private String accessKeySecret;
+        private List<Map<String, String>> template = new ArrayList<>();
+
+        public boolean isEnable() {
+            return enable;
+        }
+
+        public void setEnable(boolean enable) {
+            this.enable = enable;
+        }
+
+        public String getRegionId() {
+            return regionId;
+        }
+
+        public void setRegionId(String regionId) {
+            this.regionId = regionId;
+        }
+
+        public String getDomain() {
+            return domain;
+        }
+
+        public void setDomain(String domain) {
+            this.domain = domain;
+        }
+
+        public String getSignName() {
+            return signName;
+        }
+
+        public void setSignName(String signName) {
+            this.signName = signName;
+        }
+
+        public String getAccessKeyId() {
+            return accessKeyId;
+        }
+
+        public void setAccessKeyId(String accessKeyId) {
+            this.accessKeyId = accessKeyId;
+        }
+
+        public String getAccessKeySecret() {
+            return accessKeySecret;
+        }
+
+        public void setAccessKeySecret(String accessKeySecret) {
+            this.accessKeySecret = accessKeySecret;
+        }
+
+        public List<Map<String, String>> getTemplate() {
+            return template;
+        }
+
+        public void setTemplate(List<Map<String, String>> template) {
+            this.template = template;
         }
     }
 

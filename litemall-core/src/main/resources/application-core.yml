@@ -1,11 +1,10 @@
 litemall:
-  # 开发者应该设置成自己的wx相关信息
   wx:
-    app-id: wxa5b486c6b918ecfb
-    app-secret: e04004829d4c383b4db7769d88dfbca1
-    mch-id: 111111
+    app-id: wx17f7e9fa352489b0
+    app-secret: b605ddb00f966d0e0617cd9008f6f89c
+    mch-id: 1397967602
     mch-key: xxxxxx
-    notify-url: http://www.example.com/wx/order/pay-notify
+    notify-url: https://manage.rainsunyy.com/wx/order/pay-notify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
     key-path: xxxxx
@@ -20,7 +19,20 @@ litemall:
       password: XXXXXXXXXXXXX
       sendfrom: ex@ex.com.cn
       sendto: ex@qq.com
-
+    alisms:
+      enable: true
+      regionId: cn-hangzhou
+      domain: dysmsapi.aliyuncs.com
+      signName: 霖生园艺
+      accessKeyId: LTAIobQ8TKUyBw1I
+      accessKeySecret: R4YNLXKrrRz8g8NNuWPJrPgnAfvoJ8
+      template:
+      - name: begin_send
+        templateCode: SMS_162521920
+      - name: buy_success
+        templateCode: SMS_162199643
+      - name: verify_code
+        templateCode: SMS_162199642
     # 短消息模版通知配置
     # 短信息用于通知客户，例如发货短信通知，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
     sms:
@@ -36,7 +48,6 @@ litemall:
         templateId: 158002
       - name: refund
         templateId: 159447
-
     # 微信模版通知配置
     # 微信模版用于通知客户或者运营者，注意配置格式；template-name，template-templateId 请参考 NotifyType 枚举值
     wx:

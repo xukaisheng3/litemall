@@ -1,6 +1,8 @@
 package org.linlinjava.litemall.core.notify.config;
 
 import com.github.qcloudsms.SmsSingleSender;
+
+import org.linlinjava.litemall.core.notify.AliSmsSender;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.TencentSmsSender;
 import org.linlinjava.litemall.core.notify.WxTemplateSender;
@@ -29,6 +31,12 @@ public class NotifyAutoConfiguration {
             notifyService.setMailSender(mailSender());
             notifyService.setSendFrom(mailConfig.getSendfrom());
             notifyService.setSendTo(mailConfig.getSendto());
+        }
+
+        NotifyProperties.Alisms alismsConfig = properties.getAlisms();
+        if (alismsConfig.isEnable()) {
+            notifyService.setSmsSender(aliSmsSender());
+            notifyService.setAlismsTemplate(alismsConfig.getTemplate());
         }
 
         NotifyProperties.Sms smsConfig = properties.getSms();
@@ -68,4 +76,12 @@ public class NotifyAutoConfiguration {
         smsSender.setSender(new SmsSingleSender(smsConfig.getAppid(), smsConfig.getAppkey()));
         return smsSender;
     }
+
+    @Bean
+    public AliSmsSender aliSmsSender() {
+        NotifyProperties.Alisms smsConfig = properties.getAlisms();
+        AliSmsSender smsSender = new AliSmsSender(smsConfig.getRegionId(),smsConfig.getAccessKeyId(),smsConfig.getAccessKeySecret(),smsConfig.getDomain(),smsConfig.getSignName());
+        return smsSender;
+    }
+
 }

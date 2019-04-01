@@ -18,6 +18,7 @@ public class NotifyService {
 
     private SmsSender smsSender;
     private List<Map<String, String>> smsTemplate = new ArrayList<>();
+    private List<Map<String, String>> alismsTemplate = new ArrayList<>();
 
     private WxTemplateSender wxTemplateSender;
     private List<Map<String, String>> wxTemplate = new ArrayList<>();
@@ -70,6 +71,19 @@ public class NotifyService {
         smsSender.sendWithTemplate(phoneNumber, templateId, params);
     }
 
+        @Async
+    public void notifyAliSmsTemplate(String phoneNumber, NotifyTypeAliSms notifyTypeAliSms, String params) {
+        if (smsSender == null) {
+            return;
+        }
+
+        String templateIdStr = getTemplateCode(notifyTypeAliSms, alismsTemplate);
+        if (templateIdStr == null) {
+            return;
+        }
+        smsSender.sendWithAliTemplate(phoneNumber, templateIdStr, params);
+    }
+
     /**
      * 以同步的方式发送短信模版消息通知
      *
@@ -86,6 +100,19 @@ public class NotifyService {
 
         return smsSender.sendWithTemplate(phoneNumber, templateId, params);
     }
+
+    public SmsResult notifyAliSmsTemplateSync(String phoneNumber, NotifyTypeAliSms notifyTypeAliSms, String params) {
+        if (smsSender == null) {
+            return null;
+        }
+
+        String templateIdStr = getTemplateCode(notifyTypeAliSms, alismsTemplate);
+        if (templateIdStr == null) {
+            return null;
+        }
+       return  smsSender.sendWithAliTemplate(phoneNumber, templateIdStr, params);
+    }
+
 
     /**
      * 微信模版消息通知,不跳转
@@ -154,6 +181,17 @@ public class NotifyService {
         return null;
     }
 
+    private String getTemplateCode(NotifyTypeAliSms notifyType, List<Map<String, String>> values) {
+        for (Map<String, String> item : values) {
+            String notifyTypeStr = notifyType.getType();
+
+            if (item.get("name").equals(notifyTypeStr)) {
+                return item.get("templateCode");
+            }
+        }
+        return null;
+    }
+
     public void setMailSender(MailSender mailSender) {
         this.mailSender = mailSender;
     }
@@ -172,6 +210,14 @@ public class NotifyService {
 
     public void setSmsTemplate(List<Map<String, String>> smsTemplate) {
         this.smsTemplate = smsTemplate;
+    }
+
+    public List<Map<String, String>> getAlismsTemplate() {
+        return alismsTemplate;
+    }
+
+    public void setAlismsTemplate(List<Map<String, String>> alismsTemplate) {
+        this.alismsTemplate = alismsTemplate;
     }
 
     public void setWxTemplateSender(WxTemplateSender wxTemplateSender) {

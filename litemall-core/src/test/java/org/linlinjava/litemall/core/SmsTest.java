@@ -4,6 +4,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
+import org.linlinjava.litemall.core.notify.NotifyTypeAliSms;
+import org.linlinjava.litemall.core.notify.SmsResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
@@ -37,35 +39,17 @@ public class SmsTest {
 
     @Test
     public void testCaptcha() {
-        String phone = "xxxxxxxxxxx";
+        String phone = "1851143013166";
         String[] params = new String[]{"123456"};
 
-        notifyService.notifySmsTemplate(phone, NotifyType.CAPTCHA, params);
+      //  notifyService.notifySmsTemplate(phone, NotifyType.CAPTCHA, params);
+
+        SmsResult smsResult= notifyService.notifyAliSmsTemplateSync(phone,NotifyTypeAliSms.VERIFY_CODE,"{\"code\":\"123456\"}");
+        System.out.println(smsResult.getResult());
     }
 
-    @Test
-    public void testPaySucceed() {
-        String phone = "xxxxxxxxxxx";
-        String[] params = new String[]{"123456"};
 
-        notifyService.notifySmsTemplate(phone, NotifyType.PAY_SUCCEED, params);
-    }
 
-    @Test
-    public void testShip() {
-        String phone = "xxxxxxxxxxx";
-        String[] params = new String[]{"123456"};
-
-        notifyService.notifySmsTemplate(phone, NotifyType.SHIP, params);
-    }
-
-    @Test
-    public void testRefund() {
-        String phone = "xxxxxxxxxxx";
-        String[] params = new String[]{"123456"};
-
-        notifyService.notifySmsTemplate(phone, NotifyType.REFUND, params);
-    }
 
     @Configuration
     @Import(Application.class)
