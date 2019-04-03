@@ -7,6 +7,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
+import org.linlinjava.litemall.core.notify.NotifyTypeAliSms;
+import org.linlinjava.litemall.core.notify.SmsResult;
 import org.linlinjava.litemall.core.util.CharUtil;
 import org.linlinjava.litemall.core.util.JacksonUtil;
 import org.linlinjava.litemall.core.util.RegexUtil;
@@ -191,8 +193,10 @@ public class WxAuthController {
             return ResponseUtil.fail(AUTH_CAPTCHA_UNSUPPORT, "小程序后台验证码服务不支持");
         }
         String code = CharUtil.getRandomNum(6);
-        notifyService.notifySmsTemplate(phoneNumber, NotifyType.CAPTCHA, new String[]{code});
-
+        SmsResult smsResult= notifyService.notifyAliSmsTemplateSync(phoneNumber,NotifyTypeAliSms.VERIFY_CODE,"{\"code\":\""+code+"\"}");
+        if (!smsResult.isSuccessful()) {
+            return ResponseUtil.fail(AUTH_CAPTCHA_FREQUENCY, "验证码发送失败"+smsResult.getResult().toString());
+        }
         boolean successful = CaptchaCodeManager.addToCache(phoneNumber, code);
         if (!successful) {
             return ResponseUtil.fail(AUTH_CAPTCHA_FREQUENCY, "验证码未超时1分钟，不能发送");
