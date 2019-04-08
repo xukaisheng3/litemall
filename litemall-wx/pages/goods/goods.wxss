@@ -732,6 +732,8 @@
   float: left;
   height: 177rpx;
   display: flex;
+  flex-direction: row;
+  flex-wrap:nowrap;
   align-items: center;
 }
 
@@ -748,6 +750,7 @@
   color: #333;
   height: 40rpx;
   line-height: 40rpx;
+  white-space:pre-line;
 }
 
 .spec-con {

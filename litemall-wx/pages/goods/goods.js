@@ -373,7 +373,7 @@ Page({
         console.error('规格所对应货品不存在');
         return;
       }
-
+      console.log(checkedProductArray.length);
       let checkedProduct = checkedProductArray[0];
       if (checkedProduct.number > 0) {
         this.setData({
