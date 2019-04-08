@@ -22,6 +22,7 @@ Page({
     number: 1,
     checkedSpecText: '规格数量选择',
     tmpSpecText: '请选择规格数量',
+    checkGoodsUrl:'',
     tmpSpecNumText: '',
     checkedSpecPrice: 0,
     openAttr: false,
@@ -167,6 +168,7 @@ Page({
           userHasCollect: res.data.userHasCollect,
           shareImage: res.data.shareImage,
           checkedSpecPrice: res.data.info.retailPrice,
+          checkGoodsUrl: res.data.info.picUrl,
           groupon: res.data.groupon
         });
 
@@ -375,6 +377,7 @@ Page({
       let checkedProduct = checkedProductArray[0];
       if (checkedProduct.number > 0) {
         this.setData({
+          checkGoodsUrl: checkedProduct.url,
           checkedSpecPrice: checkedProduct.price,
           tmpSpecNumText: '剩余' + checkedProduct.number + this.data.goods.unit,
           soldout: false
