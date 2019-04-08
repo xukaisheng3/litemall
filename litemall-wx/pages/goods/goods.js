@@ -22,6 +22,7 @@ Page({
     number: 1,
     checkedSpecText: '规格数量选择',
     tmpSpecText: '请选择规格数量',
+    tmpSpecNumText: '',
     checkedSpecPrice: 0,
     openAttr: false,
     openShare: false,
@@ -375,6 +376,7 @@ Page({
       if (checkedProduct.number > 0) {
         this.setData({
           checkedSpecPrice: checkedProduct.price,
+          tmpSpecNumText: '剩余' + checkedProduct.number + this.data.goods.unit,
           soldout: false
         });
       } else {

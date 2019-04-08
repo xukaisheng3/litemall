@@ -12,12 +12,12 @@ Page({
   data: {
     load_statue: true,
     shopInfo: {
-      name: 'litemall',
-      address: 'https://github.com/linlinjava/litemall',
+      name: '霖生园艺批发平台',
+      address: 'https://www.rainsunyy.com/',
       latitude: 31.201900,
       longitude: 121.587839,
-      linkPhone: '021-xxxx-xxxx',
-      qqNumber: '738696120'
+      linkPhone: '15061855711',
+      qqNumber: '403088166'
     },
   },
 
