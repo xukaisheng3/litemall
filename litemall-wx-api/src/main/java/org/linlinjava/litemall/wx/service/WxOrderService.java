@@ -15,6 +15,8 @@ import org.linlinjava.litemall.core.express.ExpressService;
 import org.linlinjava.litemall.core.express.dao.ExpressInfo;
 import org.linlinjava.litemall.core.notify.NotifyService;
 import org.linlinjava.litemall.core.notify.NotifyType;
+import org.linlinjava.litemall.core.notify.NotifyTypeAliSms;
+import org.linlinjava.litemall.core.notify.SmsResult;
 import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.core.util.DateTimeUtil;
@@ -671,7 +673,10 @@ public class WxOrderService {
         // 订单支付成功以后，会发送短信给用户，以及发送邮件给管理员
         notifyService.notifyMail("新订单通知", order.toString());
         // 这里微信的短信平台对参数长度有限制，所以将订单号只截取后6位
-        notifyService.notifySmsTemplateSync(order.getMobile(), NotifyType.PAY_SUCCEED, new String[]{orderSn.substring(8, 14)});
+        SmsResult smsResult= notifyService.notifyAliSmsTemplateSync(order.getMobile(),NotifyTypeAliSms.BUY_SUCCESS,"{\"code\":\""+orderSn.substring(8, 14)+"\"}");
+        if (!smsResult.isSuccessful()) {
+           logger.error("验证码发送失败"+smsResult.getResult().toString());
+        }
 
         // 请依据自己的模版消息配置更改参数
         String[] parms = new String[]{
