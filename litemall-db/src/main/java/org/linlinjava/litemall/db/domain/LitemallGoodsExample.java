@@ -290,6 +290,14 @@ public class LitemallGoodsExample {
             allCriteria = null;
         }
 
+        protected void addOrCriterion(String condition, Object value, String property) {
+            if (value == null) {
+                throw new RuntimeException("Value for " + property + " cannot be null");
+            }
+            criteria.add(new Criterion(condition, value,false));
+            allCriteria = null;
+        }
+
         protected void addCriterion(String condition, Object value1, Object value2, String property) {
             if (value1 == null || value2 == null) {
                 throw new RuntimeException("Between values for " + property + " cannot be null");
@@ -686,6 +694,15 @@ public class LitemallGoodsExample {
 
         public Criteria andNameLike(String value) {
             addCriterion("`name` like", value, "name");
+            return (Criteria) this;
+        }
+
+        public Criteria andDoorstoreLike(String value) {
+            addCriterion("`doorstore_ids` like", value, "doorstoreIds");
+            return (Criteria) this;
+        }
+        public Criteria andDoorstoreOrLike(String value) {
+            addOrCriterion("`doorstore_ids` like", value, "doorstoreIds");
             return (Criteria) this;
         }
 
@@ -2113,7 +2130,7 @@ public class LitemallGoodsExample {
             return (Criteria) this;
         }
 
-        public Criteria andDoorstoreIdsNotIn(List<Integer[]> values) {
+        public Criteria andDoorstoreIdsNotIn(List<Integer> values) {
             addDoorstoreIdsCriterion("doorstore_ids not in", values, "doorstoreIds");
             return (Criteria) this;
         }
@@ -3263,6 +3280,8 @@ public class LitemallGoodsExample {
 
         private boolean singleValue;
 
+        private boolean orValue;
+
         private boolean betweenValue;
 
         private boolean listValue;
@@ -3289,6 +3308,10 @@ public class LitemallGoodsExample {
             return singleValue;
         }
 
+        public boolean isOrValue() {
+            return orValue;
+        }
+
         public boolean isBetweenValue() {
             return betweenValue;
         }
@@ -3301,11 +3324,25 @@ public class LitemallGoodsExample {
             return typeHandler;
         }
 
+
         protected Criterion(String condition) {
             super();
             this.condition = condition;
             this.typeHandler = null;
             this.noValue = true;
+        }
+
+        protected Criterion(String condition, Object value, String typeHandler,boolean orValue) {
+            super();
+            this.condition = condition;
+            this.value = value;
+            this.typeHandler = typeHandler;
+            this.orValue=true;
+            if (value instanceof List<?>) {
+                this.listValue = true;
+            } else {
+                this.singleValue = false;
+            }
         }
 
         protected Criterion(String condition, Object value, String typeHandler) {
@@ -3322,6 +3359,10 @@ public class LitemallGoodsExample {
 
         protected Criterion(String condition, Object value) {
             this(condition, value, null);
+        }
+
+        protected Criterion(String condition, Object value,boolean orValue) {
+            this(condition, value, null,orValue);
         }
 
         protected Criterion(String condition, Object value, Object secondValue, String typeHandler) {

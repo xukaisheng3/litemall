@@ -48,8 +48,8 @@ public class AdminGoodsService {
     private QCodeService qCodeService;
 
     public Object list(String goodsSn, String name,
-                       Integer page, Integer limit, String sort, String order) {
-        List<LitemallGoods> goodsList = goodsService.querySelective(goodsSn, name, page, limit, sort, order);
+                       Integer page, Integer limit, String sort, String order,Integer [] doorstoreIds) {
+        List<LitemallGoods> goodsList = goodsService.querySelective(goodsSn, name, page, limit, sort, order, doorstoreIds);
         long total = PageInfo.of(goodsList).getTotal();
         Map<String, Object> data = new HashMap<>();
         data.put("total", total);

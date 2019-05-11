@@ -11,6 +11,7 @@ import org.springframework.util.StringUtils;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -126,7 +127,7 @@ public class LitemallGoodsService {
         return goodsMapper.selectByExampleSelective(example, columns);
     }
 
-    public List<LitemallGoods> querySelective(String goodsSn, String name, Integer page, Integer size, String sort, String order) {
+    public List<LitemallGoods> querySelective(String goodsSn, String name, Integer page, Integer size, String sort, String order,Integer [] doorstoreIds) {
         LitemallGoodsExample example = new LitemallGoodsExample();
         LitemallGoodsExample.Criteria criteria = example.createCriteria();
 
@@ -135,6 +136,16 @@ public class LitemallGoodsService {
         }
         if (!StringUtils.isEmpty(name)) {
             criteria.andNameLike("%" + name + "%");
+        }
+
+        if (!StringUtils.isEmpty(doorstoreIds)) {
+            for(int i=0;i<doorstoreIds.length;i++) {
+               if(i==0) {
+                   criteria.andDoorstoreLike("%" + doorstoreIds[i] + "%");
+               }else{
+                   criteria.andDoorstoreOrLike("%" + doorstoreIds[i] + "%");
+               }
+            }
         }
         criteria.andDeletedEqualTo(false);
 
