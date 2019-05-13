@@ -6,12 +6,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.linlinjava.litemall.admin.annotation.Doorstore;
 import org.linlinjava.litemall.admin.annotation.RequiresPermissionsDesc;
+import org.linlinjava.litemall.admin.annotation.support.DoorstoreInterceptor;
 import org.linlinjava.litemall.core.util.ResponseUtil;
 import org.linlinjava.litemall.core.validator.Order;
 import org.linlinjava.litemall.core.validator.Sort;
@@ -83,11 +86,10 @@ public class AdminDoorstoreController {
         doorstoreService.add(brand);
         return ResponseUtil.ok(brand);
     }
-
+    @Doorstore
     @GetMapping("/options")
-    public Object options(){
-        List<LitemallDoorstore> roleList = doorstoreService.queryAll();
-
+    public Object options(HttpServletRequest request){
+        List<LitemallDoorstore> roleList = doorstoreService.queryAllByDoorstoreIds((Integer[]) request.getAttribute(DoorstoreInterceptor.DOORSTORE_OBJECT));
         List<Map<String, Object>> options = new ArrayList<>(roleList.size());
         for (LitemallDoorstore role : roleList) {
             Map<String, Object> option = new HashMap<>(2);

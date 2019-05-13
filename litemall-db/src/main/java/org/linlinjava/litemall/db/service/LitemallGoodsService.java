@@ -137,7 +137,9 @@ public class LitemallGoodsService {
         if (!StringUtils.isEmpty(name)) {
             criteria.andNameLike("%" + name + "%");
         }
-
+        if (StringUtils.isEmpty(doorstoreIds)) {
+            criteria.andDoorstoreLike("%这是不可能的数字%");
+        }
         if (!StringUtils.isEmpty(doorstoreIds)) {
             for(int i=0;i<doorstoreIds.length;i++) {
                if(i==0) {
@@ -147,6 +149,7 @@ public class LitemallGoodsService {
                }
             }
         }
+
         criteria.andDeletedEqualTo(false);
 
         if (!StringUtils.isEmpty(sort) && !StringUtils.isEmpty(order)) {

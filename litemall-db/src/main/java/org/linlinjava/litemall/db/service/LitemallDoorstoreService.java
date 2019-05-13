@@ -1,7 +1,10 @@
 package org.linlinjava.litemall.db.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.annotation.Resource;
 
@@ -84,6 +87,22 @@ public class LitemallDoorstoreService {
     public List<LitemallDoorstore> queryAll() {
         LitemallDoorstoreExample example = new LitemallDoorstoreExample();
         example.or().andDeletedEqualTo(false);
+        return doorstoreMapper.selectByExample(example);
+    }
+    public List<LitemallDoorstore> queryAllByDoorstoreIds(Integer[] doorstoreIds) {
+        LitemallDoorstoreExample example = new LitemallDoorstoreExample();
+        LitemallDoorstoreExample.Criteria criteria = example.createCriteria();
+        if(StringUtils.isEmpty(doorstoreIds)){
+            List<Long> ss=new ArrayList<>();
+            ss.add(99999999L);
+            criteria.andIdIn(ss);
+        }
+        if (!StringUtils.isEmpty(doorstoreIds)) {
+           List<Integer> ss= Stream.of(doorstoreIds).collect(Collectors.toList());
+            criteria.andIdIn(ss.stream().map(a -> Long.parseLong(a.toString())).collect(Collectors.toList()));
+        }
+        criteria.andDeletedEqualTo(false);
+      //  example.or().andDeletedEqualTo(false);
         return doorstoreMapper.selectByExample(example);
     }
 }
