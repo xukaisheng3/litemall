@@ -13,6 +13,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 
 @Service
@@ -30,7 +31,7 @@ public class QCodeService {
             File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("groupon," + groupon.getId(), "pages/index/index");
             FileInputStream inputStream = new FileInputStream(file);
             //将商品图片，商品名字,商城名字画到模版图中
-            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName);
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,new BigDecimal(0));
             ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
             //存储分享图
             String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(groupon.getId().toString()));
@@ -55,7 +56,7 @@ public class QCodeService {
      * @param goodPicUrl
      * @param goodName
      */
-    public String createGoodShareImage(String goodId, String goodPicUrl, String goodName) {
+    public String createGoodShareImage(String goodId, String goodPicUrl, String goodName,BigDecimal retailPrice) {
         if (!SystemConfig.isAutoCreateShareImage())
             return "";
 
@@ -64,7 +65,33 @@ public class QCodeService {
             File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("goods," + goodId, "pages/index/index");
             FileInputStream inputStream = new FileInputStream(file);
             //将商品图片，商品名字,商城名字画到模版图中
-            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName);
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,retailPrice);
+            ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
+            //存储分享图
+            String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(goodId));
+
+            return url;
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public String createPersonalGoodShareImage(int personalId, String goodId, String goodPicUrl, String goodName, BigDecimal retailPrice) {
+        if (!SystemConfig.isAutoCreateShareImage())
+            return "";
+
+        try {
+            //创建该商品的二维码
+            File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("goods," + goodId+",personalId,"+personalId, "pages/index/index");
+            FileInputStream inputStream = new FileInputStream(file);
+            //将商品图片，商品名字,商城名字画到模版图中
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,retailPrice);
             ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
             //存储分享图
             String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(goodId));
@@ -94,7 +121,7 @@ public class QCodeService {
      * @return
      * @throws IOException
      */
-    private byte[] drawPicture(InputStream qrCodeImg, String goodPicUrl, String goodName) throws IOException {
+    private byte[] drawPicture(InputStream qrCodeImg, String goodPicUrl, String goodName, BigDecimal retailPrice) throws IOException {
         //底图
         ClassPathResource redResource = new ClassPathResource("back.png");
         BufferedImage red = ImageIO.read(redResource.getInputStream());
@@ -125,7 +152,7 @@ public class QCodeService {
         drawTextInImg(baseImage, goodName, 65, 867);
 
         //写上商城名称
-//        drawTextInImgCenter(baseImage, shopName, 98);
+        drawTextInImgCenter(baseImage, "￥ "+retailPrice.setScale(2), 65,938);
 
 
         //转jpg
@@ -139,7 +166,7 @@ public class QCodeService {
         return bs.toByteArray();
     }
 
-    private void drawTextInImgCenter(BufferedImage baseImage, String textToWrite, int y) {
+    private void drawTextInImgCenter(BufferedImage baseImage, String textToWrite,int x, int y) {
         Graphics2D g2D = (Graphics2D) baseImage.getGraphics();
         g2D.setColor(new Color(167, 136, 69));
 
@@ -155,7 +182,7 @@ public class QCodeService {
         int widthX = (baseImage.getWidth() - textWidth) / 2;
         // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
 
-        g2D.drawString(textToWrite, widthX, y);
+        g2D.drawString(textToWrite, x, y);
         // 释放对象
         g2D.dispose();
     }
