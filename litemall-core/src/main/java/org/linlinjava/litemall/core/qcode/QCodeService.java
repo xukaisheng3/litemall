@@ -2,6 +2,9 @@ package org.linlinjava.litemall.core.qcode;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import me.chanjar.weixin.common.error.WxErrorException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.storage.StorageService;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.db.domain.LitemallGroupon;
@@ -18,6 +21,8 @@ import java.net.URL;
 
 @Service
 public class QCodeService {
+
+    private final Log logger = LogFactory.getLog(QCodeService.class);
     @Autowired
     WxMaService wxMaService;
 
@@ -121,11 +126,14 @@ public class QCodeService {
      * @return
      * @throws IOException
      */
+    //todo 图片绝对不能勾线ascii码
     private byte[] drawPicture(InputStream qrCodeImg, String goodPicUrl, String goodName, BigDecimal retailPrice) throws IOException {
         //底图
         ClassPathResource redResource = new ClassPathResource("back.png");
         BufferedImage red = ImageIO.read(redResource.getInputStream());
-
+        logger.error( "redResource"+redResource);
+        logger.error( "redResource--input"+redResource.getInputStream());
+        logger.error( "检测打印"+red);
 
         //商品图片
         URL goodPic = new URL(goodPicUrl);
