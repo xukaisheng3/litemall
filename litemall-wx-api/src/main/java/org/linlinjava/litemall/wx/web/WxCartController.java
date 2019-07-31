@@ -104,7 +104,7 @@ public class WxCartController {
         if (cart == null) {
             return ResponseUtil.badArgument();
         }
-
+        Integer personalId=cart.getPersonalId();
         Integer productId = cart.getProductId();
         Integer number = cart.getNumber().intValue();
         Integer goodsId = cart.getGoodsId();
@@ -129,6 +129,7 @@ public class WxCartController {
 
             cart.setId(null);
             cart.setGoodsSn(goods.getGoodsSn());
+            cart.setPersonalId(personalId);
             cart.setGoodsName((goods.getName()));
             cart.setPicUrl(goods.getPicUrl());
             cart.setPrice(product.getPrice());
@@ -170,7 +171,7 @@ public class WxCartController {
         if (cart == null) {
             return ResponseUtil.badArgument();
         }
-
+        Integer personalId=cart.getPersonalId();
         Integer productId = cart.getProductId();
         Integer number = cart.getNumber().intValue();
         Integer goodsId = cart.getGoodsId();
@@ -192,7 +193,7 @@ public class WxCartController {
             if (product == null || number > product.getNumber()) {
                 return ResponseUtil.fail(GOODS_NO_STOCK, "库存不足");
             }
-
+            cart.setPersonalId(personalId);
             cart.setId(null);
             cart.setGoodsSn(goods.getGoodsSn());
             cart.setGoodsName((goods.getName()));
