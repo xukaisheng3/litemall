@@ -157,10 +157,10 @@ public class QCodeService {
         drawImgInImg(baseImage, qrCodeImage, 448, 767, 300, 300);
 
         //写上商品名称
-        drawTextInImg(baseImage, goodName, 65, 867);
+        drawTextInImg(baseImage, goodName, 65, 860);
 
-        //写上商城名称
-        drawTextInImgCenter(baseImage, "￥ "+retailPrice.setScale(2), 65,938);
+        //写上价格名称
+        drawTextInImgCenter(baseImage, "￥"+retailPrice.setScale(2)+"  长按右侧二维码购买", 65,938);
 
 
         //转jpg
@@ -177,7 +177,6 @@ public class QCodeService {
     private void drawTextInImgCenter(BufferedImage baseImage, String textToWrite,int x, int y) {
         Graphics2D g2D = (Graphics2D) baseImage.getGraphics();
         g2D.setColor(new Color(167, 136, 69));
-
         String fontName = "Microsoft YaHei";
 
         Font f = new Font(fontName, Font.PLAIN, 28);
@@ -197,10 +196,10 @@ public class QCodeService {
 
     private void drawTextInImg(BufferedImage baseImage, String textToWrite, int x, int y) {
         Graphics2D g2D = (Graphics2D) baseImage.getGraphics();
-        g2D.setColor(new Color(167, 136, 69));
+        g2D.setColor(new Color(0, 0, 0));
 
         //TODO 注意，这里的字体必须安装在服务器上
-        g2D.setFont(new Font("Microsoft YaHei", Font.PLAIN, 28));
+        g2D.setFont(new Font("Microsoft YaHei", Font.PLAIN, 32));
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2D.drawString(textToWrite, x, y);
