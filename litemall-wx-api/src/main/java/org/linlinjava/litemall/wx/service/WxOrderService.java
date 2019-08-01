@@ -375,6 +375,7 @@ public class WxOrderService {
             // 订单商品
             LitemallOrderGoods orderGoods = new LitemallOrderGoods();
             orderGoods.setOrderId(order.getId());
+            orderGoods.setPersonalId(cartGoods.getPersonalId());
             orderGoods.setGoodsId(cartGoods.getGoodsId());
             orderGoods.setGoodsSn(cartGoods.getGoodsSn());
             orderGoods.setProductId(cartGoods.getProductId());
