@@ -2,7 +2,10 @@ package org.linlinjava.litemall.wx.web;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.linlinjava.litemall.core.qcode.QCodeService;
 import org.linlinjava.litemall.core.util.ResponseUtil;
+import org.linlinjava.litemall.db.domain.LitemallGoods;
+import org.linlinjava.litemall.db.service.LitemallGoodsService;
 import org.linlinjava.litemall.db.service.LitemallOrderService;
 import org.linlinjava.litemall.wx.annotation.LoginUser;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +25,12 @@ import java.util.Map;
 @Validated
 public class WxUserController {
     private final Log logger = LogFactory.getLog(WxUserController.class);
-
+    @Autowired
+    LitemallGoodsService litemallGoodsService;
     @Autowired
     private LitemallOrderService orderService;
+    @Autowired
+    QCodeService qCodeService;
 
     /**
      * 用户个人页面数据
@@ -44,5 +50,19 @@ public class WxUserController {
         data.put("order", orderService.orderInfo(userId));
         return ResponseUtil.ok(data);
     }
+
+    /**
+     * 用户Id
+     */
+    @GetMapping("userId")
+    public Object userId(@LoginUser Integer userId,Integer goodsId) {
+        if (userId == null) {
+            return ResponseUtil.unlogin();
+        }
+        LitemallGoods good = litemallGoodsService.findById(goodsId);
+       String url= qCodeService.createPersonalGoodShareImage(userId,good.getId().toString(), good.getPicUrl(), good.getName(),good.getRetailPrice());
+        return ResponseUtil.ok(url);
+    }
+
 
 }

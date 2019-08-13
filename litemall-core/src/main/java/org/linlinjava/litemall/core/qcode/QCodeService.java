@@ -2,6 +2,9 @@ package org.linlinjava.litemall.core.qcode;
 
 import cn.binarywang.wx.miniapp.api.WxMaService;
 import me.chanjar.weixin.common.error.WxErrorException;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.linlinjava.litemall.core.storage.StorageService;
 import org.linlinjava.litemall.core.system.SystemConfig;
 import org.linlinjava.litemall.db.domain.LitemallGroupon;
@@ -13,10 +16,13 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.math.BigDecimal;
 import java.net.URL;
 
 @Service
 public class QCodeService {
+
+    private final Log logger = LogFactory.getLog(QCodeService.class);
     @Autowired
     WxMaService wxMaService;
 
@@ -30,7 +36,7 @@ public class QCodeService {
             File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("groupon," + groupon.getId(), "pages/index/index");
             FileInputStream inputStream = new FileInputStream(file);
             //将商品图片，商品名字,商城名字画到模版图中
-            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName);
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,new BigDecimal(0));
             ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
             //存储分享图
             String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(groupon.getId().toString()));
@@ -55,7 +61,7 @@ public class QCodeService {
      * @param goodPicUrl
      * @param goodName
      */
-    public String createGoodShareImage(String goodId, String goodPicUrl, String goodName) {
+    public String createGoodShareImage(String goodId, String goodPicUrl, String goodName,BigDecimal retailPrice) {
         if (!SystemConfig.isAutoCreateShareImage())
             return "";
 
@@ -64,7 +70,33 @@ public class QCodeService {
             File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("goods," + goodId, "pages/index/index");
             FileInputStream inputStream = new FileInputStream(file);
             //将商品图片，商品名字,商城名字画到模版图中
-            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName);
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,retailPrice);
+            ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
+            //存储分享图
+            String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(goodId));
+
+            return url;
+        } catch (WxErrorException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public String createPersonalGoodShareImage(int personalId, String goodId, String goodPicUrl, String goodName, BigDecimal retailPrice) {
+        if (!SystemConfig.isAutoCreateShareImage())
+            return "";
+
+        try {
+            //创建该商品的二维码
+            File file = wxMaService.getQrcodeService().createWxaCodeUnlimit("goods," + goodId+",personalId,"+personalId, "pages/index/index");
+            FileInputStream inputStream = new FileInputStream(file);
+            //将商品图片，商品名字,商城名字画到模版图中
+            byte[] imageData = drawPicture(inputStream, goodPicUrl, goodName,retailPrice);
             ByteArrayInputStream inputStream2 = new ByteArrayInputStream(imageData);
             //存储分享图
             String url = storageService.store(inputStream2, imageData.length, "image/jpeg", getKeyName(goodId));
@@ -94,11 +126,14 @@ public class QCodeService {
      * @return
      * @throws IOException
      */
-    private byte[] drawPicture(InputStream qrCodeImg, String goodPicUrl, String goodName) throws IOException {
+    //todo 图片绝对不能勾线ascii码
+    private byte[] drawPicture(InputStream qrCodeImg, String goodPicUrl, String goodName, BigDecimal retailPrice) throws IOException {
         //底图
         ClassPathResource redResource = new ClassPathResource("back.png");
         BufferedImage red = ImageIO.read(redResource.getInputStream());
-
+        logger.error( "redResource"+redResource);
+        logger.error( "redResource--input"+redResource.getInputStream());
+        logger.error( "检测打印"+red);
 
         //商品图片
         URL goodPic = new URL(goodPicUrl);
@@ -122,10 +157,10 @@ public class QCodeService {
         drawImgInImg(baseImage, qrCodeImage, 448, 767, 300, 300);
 
         //写上商品名称
-        drawTextInImg(baseImage, goodName, 65, 867);
+        drawTextInImg(baseImage, goodName, 65, 860);
 
-        //写上商城名称
-//        drawTextInImgCenter(baseImage, shopName, 98);
+        //写上价格名称
+        drawTextInImgCenter(baseImage, "￥"+retailPrice.setScale(2)+"  长按右侧二维码购买", 65,938);
 
 
         //转jpg
@@ -139,10 +174,9 @@ public class QCodeService {
         return bs.toByteArray();
     }
 
-    private void drawTextInImgCenter(BufferedImage baseImage, String textToWrite, int y) {
+    private void drawTextInImgCenter(BufferedImage baseImage, String textToWrite,int x, int y) {
         Graphics2D g2D = (Graphics2D) baseImage.getGraphics();
         g2D.setColor(new Color(167, 136, 69));
-
         String fontName = "Microsoft YaHei";
 
         Font f = new Font(fontName, Font.PLAIN, 28);
@@ -155,17 +189,17 @@ public class QCodeService {
         int widthX = (baseImage.getWidth() - textWidth) / 2;
         // 表示这段文字在图片上的位置(x,y) .第一个是你设置的内容。
 
-        g2D.drawString(textToWrite, widthX, y);
+        g2D.drawString(textToWrite, x, y);
         // 释放对象
         g2D.dispose();
     }
 
     private void drawTextInImg(BufferedImage baseImage, String textToWrite, int x, int y) {
         Graphics2D g2D = (Graphics2D) baseImage.getGraphics();
-        g2D.setColor(new Color(167, 136, 69));
+        g2D.setColor(new Color(0, 0, 0));
 
         //TODO 注意，这里的字体必须安装在服务器上
-        g2D.setFont(new Font("Microsoft YaHei", Font.PLAIN, 28));
+        g2D.setFont(new Font("Microsoft YaHei", Font.PLAIN, 32));
         g2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         g2D.drawString(textToWrite, x, y);

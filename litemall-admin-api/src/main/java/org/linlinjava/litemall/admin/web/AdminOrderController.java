@@ -73,6 +73,16 @@ public class AdminOrderController {
         return adminOrderService.refund(body);
     }
 
+
+    /**
+     * 订单相关商品结算佣金
+     */
+
+    @PostMapping("/goods/personal")
+    public Object goodsPersonal(@RequestBody String body) {
+        return adminOrderService.personal(body);
+    }
+
     /**
      * 发货
      *

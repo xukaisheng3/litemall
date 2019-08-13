@@ -209,6 +209,20 @@ public class AdminOrderService {
     }
 
 
+    public Object personal(String body) {
+        Integer orderId = JacksonUtil.parseInteger(body, "orderGoodsId");
+        if (orderId == null) {
+            return ResponseUtil.badArgument();
+        }
+        LitemallOrderGoods order = orderGoodsService.findById(orderId);
+        if (order == null) {
+            return ResponseUtil.badArgument();
+        }
+        order.setPersonalState(1);
+        orderGoodsService.updateById(order);
+        return ResponseUtil.ok();
+    }
+
     /**
      * 回复订单商品
      *
