@@ -1,13 +1,13 @@
 litemall:
   wx:
-    app-id: wx17f7e9fa352489b0
-    app-secret: b605ddb00f966d0e0617cd9008f6f89c
-    mch-id: 1397967602
-    mch-key: linshengyuanyiguigangwangddddddd
-    notify-url: https://manage.rainsunyy.com/wx/order/pay-notify
+    app-id: wxb2be6fa6f734d63c
+    app-secret: 2b233b213b101095d16a911cbc8fb769
+    mch-id: 1550623211
+    mch-key: zhoujulan123zhoujulan123zhoujula
+    notify-url: https://www.guoweiyijx.cn/wx/order/pay-notify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
-    key-path: /opt/projects/cert/apiclient_cert.p12
+    key-path: /opt/projects/guanli/cert/apiclient_cert.p12
 
   #通知相关配置
   notify:
@@ -103,8 +103,8 @@ litemall:
     local:
       storagePath: storage
       # 这个地方应该是wx模块的WxStorageController的fetch方法对应的地址
-      #address: https://www.rainsunyy.com/wx/storage/fetch/
-      address: http://localhost:8080/wx/storage/fetch/
+      address: https://www.guoweiyijx.cn/wx/storage/fetch/
+      #address: http://localhost:8080/wx/storage/fetch/
     # 阿里云对象存储配置信息
     aliyun:
       endpoint: oss-cn-shenzhen.aliyuncs.com
