@@ -141,13 +141,19 @@ public class LitemallGoodsService {
             criteria.andDoorstoreLike("%这是不可能的数字%");
         }
         if (!StringUtils.isEmpty(doorstoreIds)) {
+            criteria.andGernalBeing();
             for(int i=0;i<doorstoreIds.length;i++) {
                if(i==0) {
+                   criteria.andGernalBeing();
                    criteria.andDoorstoreLike("%" + doorstoreIds[i] + "%");
-               }else{
+               }else {
                    criteria.andDoorstoreOrLike("%" + doorstoreIds[i] + "%");
                }
+                if(i==doorstoreIds.length-1){
+                    criteria.andGernalEnd();
+                }
             }
+            criteria.andGernalEnd();
         }
 
         criteria.andDeletedEqualTo(false);

@@ -696,11 +696,21 @@ public class LitemallGoodsExample {
             addCriterion("`name` like", value, "name");
             return (Criteria) this;
         }
-
-        public Criteria andDoorstoreLike(String value) {
-            addCriterion("`doorstore_ids` like", value, "doorstoreIds");
+        public Criteria andGernalBeing() {
+            addCriterion("( 1 = 1 ");
             return (Criteria) this;
         }
+
+        public Criteria andDoorstoreLike(String value) {
+            addCriterion(" `doorstore_ids` like", value, "doorstoreIds");
+            return (Criteria) this;
+        }
+
+        public Criteria andGernalEnd() {
+            addCriterion("1 = 1)");
+            return (Criteria) this;
+        }
+
         public Criteria andDoorstoreOrLike(String value) {
             addOrCriterion("`doorstore_ids` like", value, "doorstoreIds");
             return (Criteria) this;
