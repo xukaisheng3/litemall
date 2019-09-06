@@ -1,7 +1,7 @@
 litemall:
   wx:
-    app-id: wxb2be6fa6f734d63c
-    app-secret: 2b233b213b101095d16a911cbc8fb769
+    app-id: wxb4237bf5de15c633
+    app-secret: 3bd8c635b4732a22245530c53057138e
     mch-id: 1550623211
     mch-key: zhoujulan123zhoujulan123zhoujula
     notify-url: https://www.guoweiyijx.cn/wx/order/pay-notify
