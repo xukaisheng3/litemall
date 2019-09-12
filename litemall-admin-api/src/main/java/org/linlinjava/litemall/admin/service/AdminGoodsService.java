@@ -160,10 +160,10 @@ public class AdminGoodsService {
         // 检查是否存在购物车商品或者订单商品
         // 如果存在则拒绝修改商品。
         if (orderGoodsService.checkExist(id)) {
-            return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在订单中，不能修改");
+        //    return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在订单中，不能修改");
         }
         if (cartService.checkExist(id)) {
-            return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在购物车中，不能修改");
+        //    return ResponseUtil.fail(GOODS_UPDATE_NOT_ALLOWED, "商品已经在购物车中，不能修改");
         }
 
         //将生成的分享图片地址写入数据库

@@ -492,6 +492,8 @@ public class WxOrderService {
         // 商品货品数量增加
         List<LitemallOrderGoods> orderGoodsList = orderGoodsService.queryByOid(orderId);
         for (LitemallOrderGoods orderGoods : orderGoodsList) {
+            orderGoods.setDeleted(true);
+            orderGoodsService.updateById(orderGoods);
             Integer productId = orderGoods.getProductId();
             Short number = orderGoods.getNumber();
             if (productService.addStock(productId, number) == 0) {

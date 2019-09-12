@@ -2,12 +2,12 @@ litemall:
   wx:
     app-id: wxb4237bf5de15c633
     app-secret: 3bd8c635b4732a22245530c53057138e
-    mch-id: 1550623211
+    mch-id: 1555230591
     mch-key: zhoujulan123zhoujulan123zhoujula
     notify-url: https://www.guoweiyijx.cn/wx/order/pay-notify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
-    key-path: /opt/projects/guanli/cert/apiclient_cert.p12
+    key-path: /opt/projects/guanli/1555230591_20190909_cert/apiclient_cert.p12
 
   #通知相关配置
   notify:
