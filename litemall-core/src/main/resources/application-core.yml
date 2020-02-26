@@ -1,10 +1,10 @@
 litemall:
   wx:
     app-id: wxa971d25abbb88cb8
-    app-secret: b605ddb00f966d0e0617cd9008f6f89c
-    mch-id: 1397967602
-    mch-key: linshengyuanyiguigangwangddddddd
-    notify-url: https://manage.rainsunyy.com/wx/order/pay-notify
+    app-secret: ce27214fae10cfa4019b54e42afccadf
+    mch-id: 1533008121
+    mch-key: guoweiyi123guoweiyi123guoweiyi12
+    notify-url: https://manage.guoweiyijx.cn//wx/order/pay-notify
     # 商户证书文件路径
     # 请参考“商户证书”一节 https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=4_3
     key-path: /opt/projects/cert/apiclient_cert.p12
